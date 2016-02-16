@@ -1,0 +1,7 @@
+common_packages:
+    - nano
+    - wget
+    - htop
+    - libselinux-python
+    - epel-release
+    - unzip

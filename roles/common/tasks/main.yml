@@ -1,0 +1,16 @@
+- name: Install common packages
+  yum: name={{ item }}
+  with_items:
+    - "{{ common_packages }}"
+
+- name: Disable SELinux
+  selinux: state=disabled
+  notify:
+    - reboot_machine
+    - wait_for_bootup
+
+- name: Update all packages
+  yum: name=* state=latest
+  notify:
+    - reboot_machine
+    - wait_for_bootup
