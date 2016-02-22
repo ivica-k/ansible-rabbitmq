@@ -3,5 +3,4 @@ common_packages:
     - wget
     - htop
     - libselinux-python
-    - epel-release
     - unzip
