@@ -1,0 +1,23 @@
+- name: Install HAProxy
+  yum: name={{ item }} state=present
+  with_items:
+    - haproxy
+  notify: start_haproxy
+
+- name: Create rsyslog for HAProxy
+  template: src=rsyslog-haproxy.conf.j2 dest=/etc/rsyslog.d/haproxy.conf owner=root group=root mode=0644
+  notify: restart_rsyslog
+
+- name: Create HAProxy config for rabbitmq
+  template: src=haproxy.cfg.j2 dest=/etc/haproxy/haproxy.cfg owner=root group=root mode=0644
+
+- name: Enable syslog UDP logging
+  lineinfile: dest=/etc/rsyslog.conf
+              line="$ModLoad imudp\n$UDPServerRun 514"
+              insertafter=EOF
+
+- name: Enable syslog logging for HAProxy
+  lineinfile: dest=/etc/sysconfig/syslog
+              line="local2.*                       /var/log/haproxy.log"
+              insertafter=EOF
+              create=yes
