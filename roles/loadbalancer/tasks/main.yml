@@ -2,11 +2,7 @@
   yum: name={{ item }} state=present
   with_items:
     - haproxy
-  notify: start_haproxy
-
-- name: Create rsyslog for HAProxy
-  template: src=rsyslog-haproxy.conf.j2 dest=/etc/rsyslog.d/haproxy.conf owner=root group=root mode=0644
-  notify: restart_rsyslog
+  notify: restart_haproxy
 
 - name: Create HAProxy config for rabbitmq
   template: src=haproxy.cfg.j2 dest=/etc/haproxy/haproxy.cfg owner=root group=root mode=0644
@@ -17,7 +13,8 @@
               insertafter=EOF
 
 - name: Enable syslog logging for HAProxy
-  lineinfile: dest=/etc/sysconfig/syslog
+  lineinfile: dest=/etc/rsyslog.d/haproxy.conf
               line="local2.*                       /var/log/haproxy.log"
               insertafter=EOF
               create=yes
+  notify: restart_rsyslog
