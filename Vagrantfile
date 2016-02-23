@@ -30,8 +30,7 @@ Vagrant.configure(VAGRANTFILE_API_VERSION) do |config|
     node.vm.box = "centos7"
     node.vm.box_url = "https://f0fff3908f081cb6461b407be80daf97f07ac418.googledrive.com/host/0BwtuV7VyVTSkUG1PM3pCeDJ4dVE/centos7.box"
     node.vm.network :private_network, ip: "10.0.0.3#{i}", :netmask => "255.255.0.0"
-    node.vm.hostname = "r#{i}.tst"
-    node.hostmanager.alias = %w(r#{i})
+    node.vm.hostname = "r#{i}"
       node.vm.provider :virtualbox do |v|
 	v.memory = 512
       end      
