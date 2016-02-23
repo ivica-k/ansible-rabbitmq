@@ -1,0 +1,19 @@
+- name: Install RabbitMQ
+  yum: name={{ item }} state=present
+  with_items:
+    - rabbitmq-server
+  notify: restart_rabbitmq
+  
+- name: Generate Erlang cookie
+  shell: "openssl rand -base64 20"
+  register: erlang_cookie
+  run_once: true
+
+- name: Set Erlang cookie
+  lineinfile: dest=/var/lib/rabbitmq/.erlang.cookie
+              line="{{ erlang_cookie.stdout }}"
+              insertafter=EOF
+              create=yes
+              owner=rabbitmq
+              group=rabbitmq
+              mode=0400
